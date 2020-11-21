@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E99C2AF52564091A00AC31AE /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99C2AF42564091900AC31AE /* GameOverScene.swift */; };
+		E99C2AF92569334000AC31AE /* bubbles.atlas in Resources */ = {isa = PBXBuildFile; fileRef = E99C2AF82569334000AC31AE /* bubbles.atlas */; };
 		E9EA916B25332CD700BB90BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EA916A25332CD700BB90BC /* AppDelegate.swift */; };
 		E9EA916D25332CD700BB90BC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EA916C25332CD700BB90BC /* SceneDelegate.swift */; };
 		E9EA916F25332CD700BB90BC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EA916E25332CD700BB90BC /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		E99C2AF42564091900AC31AE /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+		E99C2AF82569334000AC31AE /* bubbles.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = bubbles.atlas; path = "../../../Downloads/Bubblepoppinganimation--1e5z0i9m503y6h6428/bubbles.atlas"; sourceTree = "<group>"; };
 		E9EA916725332CD700BB90BC /* UnderWater.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UnderWater.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9EA916A25332CD700BB90BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E9EA916C25332CD700BB90BC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 		E9EA916925332CD700BB90BC /* UnderWater */ = {
 			isa = PBXGroup;
 			children = (
+				E99C2AF82569334000AC31AE /* bubbles.atlas */,
 				E9EA916A25332CD700BB90BC /* AppDelegate.swift */,
 				E9EA916C25332CD700BB90BC /* SceneDelegate.swift */,
 				E9EA916E25332CD700BB90BC /* ViewController.swift */,
@@ -137,6 +140,7 @@
 				E9EA917A25332CE200BB90BC /* LaunchScreen.storyboard in Resources */,
 				E9EA917725332CE200BB90BC /* Assets.xcassets in Resources */,
 				E9EA917225332CD700BB90BC /* Main.storyboard in Resources */,
+				E99C2AF92569334000AC31AE /* bubbles.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

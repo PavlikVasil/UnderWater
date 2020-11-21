@@ -25,7 +25,7 @@ class GameOverScene: SKScene{
     label.position = CGPoint(x: size.width/2, y: size.height/2)
     addChild(label)
     
-    let score = GameScene.shared.score
+    let score = GameScene.score
     let scoreLabel = SKLabelNode(fontNamed: "Copperplate")
     scoreLabel.text = "Score: \(score)"
     scoreLabel.fontColor = SKColor.white

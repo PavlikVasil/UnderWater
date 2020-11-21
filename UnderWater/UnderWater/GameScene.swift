@@ -27,15 +27,16 @@ class GameScene: SKScene {
     let rect = CGRect(x: 0, y: 0, width: 700, height: 10)
     var background = SKSpriteNode(imageNamed: "water")
     var scoreLabel = SKLabelNode(fontNamed: "Copperplate")
-    static let shared = GameScene()
     
-    var score = 0
+    var bubblesFrames: [SKTexture] = []
+    
+    static var score = 0
     var health = 3
     
     
     
     override func didMove(to view: SKView) {
-        scoreLabel.text = "Score: \(score)"
+        scoreLabel.text = "Score: \(GameScene.score)"
         scoreLabel.fontColor = SKColor.white
         scoreLabel.verticalAlignmentMode = .top
         scoreLabel.position = CGPoint(x: size.width/9, y: size.height)
@@ -51,6 +52,7 @@ class GameScene: SKScene {
         submarine.physicsBody?.categoryBitMask = PhysicsCategory.submarine
         submarine.physicsBody?.contactTestBitMask = PhysicsCategory.shark
         addChild(submarine)
+        makeAnimation(submarine: submarine)
         addChild(background)
         let ground = SKShapeNode(rect: rect)
         ground.fillColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
@@ -79,6 +81,31 @@ class GameScene: SKScene {
             SKAction.run(addBarrel),
             SKAction.wait(forDuration: 5.0)])))
     }
+    
+    
+    func makeAnimation(submarine: SKSpriteNode){
+       let bubblesAnimated = SKTextureAtlas(named: "bubbles")
+        var sweamFrames: [SKTexture] = []
+        
+        let numImages = bubblesAnimated.textureNames.count
+        for i in 1...numImages{
+            let bubbleTextureName = "bubble\(i)"
+            sweamFrames.append(bubblesAnimated.textureNamed(bubbleTextureName))
+        }
+        bubblesFrames = sweamFrames
+        let firstFrameTexture = bubblesFrames[0]
+        
+        let bubble = SKSpriteNode(texture: firstFrameTexture)
+        bubble.size = CGSize(width: frame.width*0.1, height: frame.height*0.1)
+        bubble.position = CGPoint(x: submarine.position.x - 110 , y: submarine.position.y - 180)
+        
+        submarine.addChild(bubble)
+       // let moveBubbles = SKAction.moveBy(x: submarine.position.x - 2, y: submarine.position.y, duration: 0.5)
+        
+        bubble.run(SKAction.repeatForever(SKAction.sequence([SKAction.animate(with: bubblesFrames, timePerFrame: 0.3, resize: false, restore: true)])))
+        
+    }
+    
     
     
     func random()-> CGFloat{
@@ -259,8 +286,8 @@ class GameScene: SKScene {
     func missileDidCollideWithShark(missile: SKSpriteNode, shark: SKSpriteNode){
         missile.removeFromParent()
         shark.removeFromParent()
-        score += 2
-        scoreLabel.text = "Score: \(score)"
+        GameScene.score += 2
+        scoreLabel.text = "Score: \(GameScene.score)"
     }
     
     func blinc(submarine: SKSpriteNode){
@@ -327,8 +354,8 @@ class GameScene: SKScene {
     
     func submarineDidCollideWithScoreBonus(submarine: SKSpriteNode, bonusScore: SKSpriteNode){
         bonusScore.removeFromParent()
-        score += 10
-        scoreLabel.text = "Score: \(score)"
+        GameScene.score += 10
+        scoreLabel.text = "Score: \(GameScene.score)"
     }
     
 }
