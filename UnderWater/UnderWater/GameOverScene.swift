@@ -25,6 +25,13 @@ class GameOverScene: SKScene{
     label.position = CGPoint(x: size.width/2, y: size.height/2)
     addChild(label)
     
+    let score = GameScene.shared.score
+    let scoreLabel = SKLabelNode(fontNamed: "Copperplate")
+    scoreLabel.text = "Score: \(score)"
+    scoreLabel.fontColor = SKColor.white
+    scoreLabel.position = CGPoint(x: size.width/2, y: size.height/3)
+    addChild(scoreLabel)
+    
     run(SKAction.sequence([SKAction.wait(forDuration: 2.0),
                            SKAction.run {
                             [weak self] in

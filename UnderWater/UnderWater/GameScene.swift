@@ -27,6 +27,7 @@ class GameScene: SKScene {
     let rect = CGRect(x: 0, y: 0, width: 700, height: 10)
     var background = SKSpriteNode(imageNamed: "water")
     var scoreLabel = SKLabelNode(fontNamed: "Copperplate")
+    static let shared = GameScene()
     
     var score = 0
     var health = 3
