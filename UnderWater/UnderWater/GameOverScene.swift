@@ -31,7 +31,7 @@ class GameOverScene: SKScene{
     scoreLabel.fontColor = SKColor.white
     scoreLabel.position = CGPoint(x: size.width/2, y: size.height/3)
     addChild(scoreLabel)
-    
+    GameScene.score = 0
     run(SKAction.sequence([SKAction.wait(forDuration: 2.0),
                            SKAction.run {
                             [weak self] in

@@ -312,6 +312,11 @@ class GameScene: SKScene {
         health -= 1
         blinc(submarine: submarine)
         if health == 0{
+            if let explosion = SKEmitterNode(fileNamed: "explosion"){
+                submarine.removeFromParent()
+                explosion.position = submarine.position
+                addChild(explosion)
+            }
         let loseAction = SKAction.run() {
           [weak self] in
           guard let `self` = self else {return}
@@ -319,7 +324,8 @@ class GameScene: SKScene {
           let gameOverScene = GameOverScene(size: self.size, won: false)
           self.view?.presentScene(gameOverScene, transition: reveal)
         }
-         run(loseAction)
+            let wait = SKAction.wait(forDuration: 1)
+            run(SKAction.sequence([wait, loseAction]))
         }
     }
     
@@ -328,6 +334,11 @@ class GameScene: SKScene {
         health -= 1
         blinc(submarine: submarine)
         if health == 0{
+            if let explosion = SKEmitterNode(fileNamed: "explosion"){
+            submarine.removeFromParent()
+            explosion.position = submarine.position
+            addChild(explosion)
+            }
             let loseAction = SKAction.run() {
               [weak self] in
               guard let `self` = self else {return}
@@ -335,7 +346,8 @@ class GameScene: SKScene {
               let gameOverScene = GameOverScene(size: self.size, won: false)
               self.view?.presentScene(gameOverScene, transition: reveal)
             }
-            run(loseAction)
+            let wait = SKAction.wait(forDuration: 1)
+            run(SKAction.sequence([wait, loseAction]))
         }
     }
     
