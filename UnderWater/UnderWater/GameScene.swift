@@ -36,28 +36,30 @@ class GameScene: SKScene {
     
     
     override func didMove(to view: SKView) {
-        scoreLabel.text = "Score: \(GameScene.score)"
-        scoreLabel.fontColor = SKColor.white
-        scoreLabel.verticalAlignmentMode = .top
-        scoreLabel.position = CGPoint(x: size.width/9, y: size.height)
-        addChild(scoreLabel)
         
-        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-        background.size = CGSize(width: frame.width, height:frame.height)
-        background.zPosition = -1
+        
+        createScene()
+        
+        
         submarine.position = CGPoint(x: size.width * 0.12, y: size.height * 0.5)
         submarine.size = CGSize(width: frame.width * 0.15, height:frame.height * 0.15)
         submarine.physicsBody = SKPhysicsBody(rectangleOf: submarine.size)
-        submarine.physicsBody?.isDynamic = false
+        
+        submarine.physicsBody?.isDynamic = true
+        submarine.physicsBody?.affectedByGravity = true
+        submarine.physicsBody?.linearDamping = 1.0
+        submarine.physicsBody?.allowsRotation = false
+        
         submarine.physicsBody?.categoryBitMask = PhysicsCategory.submarine
-        submarine.physicsBody?.contactTestBitMask = PhysicsCategory.shark
+        submarine.physicsBody?.collisionBitMask = PhysicsCategory.all
+        submarine.physicsBody?.contactTestBitMask = PhysicsCategory.shark | PhysicsCategory.all
         addChild(submarine)
         makeAnimation(submarine: submarine)
         addChild(background)
         let ground = SKShapeNode(rect: rect)
         ground.fillColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
         addChild(ground)
-        physicsWorld.gravity = .zero
+        physicsWorld.gravity.dy = -0.6
         physicsWorld.contactDelegate = self
         
         
@@ -82,13 +84,32 @@ class GameScene: SKScene {
             SKAction.wait(forDuration: 5.0)])))
     }
     
+    func createScene(){
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        self.physicsBody?.categoryBitMask = PhysicsCategory.all
+        self.physicsBody?.collisionBitMask = PhysicsCategory.submarine
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.submarine
+        self.physicsBody?.affectedByGravity = false
+        self.physicsWorld.contactDelegate = self
+        
+        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        background.size = CGSize(width: frame.width, height:frame.height)
+        background.zPosition = -1
+        
+        scoreLabel.text = "Score: \(GameScene.score)"
+        scoreLabel.fontColor = SKColor.white
+        scoreLabel.verticalAlignmentMode = .top
+        scoreLabel.position = CGPoint(x: size.width/9, y: size.height)
+        addChild(scoreLabel)
+    }
+    
     
     func makeAnimation(submarine: SKSpriteNode){
        let bubblesAnimated = SKTextureAtlas(named: "bubbles")
         var sweamFrames: [SKTexture] = []
         
         let numImages = bubblesAnimated.textureNames.count
-        for i in 1...numImages{
+        for i in 2...numImages{
             let bubbleTextureName = "bubble\(i)"
             sweamFrames.append(bubblesAnimated.textureNamed(bubbleTextureName))
         }
@@ -130,7 +151,8 @@ class GameScene: SKScene {
         anchor.run(SKAction.sequence([wait, moveAnchor, actionDone]))
         
         anchor.physicsBody = SKPhysicsBody(rectangleOf: anchor.size)
-        anchor.physicsBody?.isDynamic = true
+        //anchor.physicsBody?.isDynamic = true
+        anchor.physicsBody?.affectedByGravity = false
         anchor.physicsBody?.categoryBitMask = PhysicsCategory.obstacle
         anchor.physicsBody?.contactTestBitMask = PhysicsCategory.submarine
         anchor.physicsBody?.collisionBitMask = PhysicsCategory.none
@@ -150,7 +172,8 @@ class GameScene: SKScene {
         stone.run(SKAction.sequence([wait, moveStone, actionDone]))
         
         stone.physicsBody = SKPhysicsBody(rectangleOf: stone.size)
-        stone.physicsBody?.isDynamic = true
+        //stone.physicsBody?.isDynamic = true
+        stone.physicsBody?.affectedByGravity = false
         stone.physicsBody?.categoryBitMask = PhysicsCategory.obstacle
         stone.physicsBody?.contactTestBitMask = PhysicsCategory.submarine
         stone.physicsBody?.collisionBitMask = PhysicsCategory.none
@@ -187,9 +210,10 @@ class GameScene: SKScene {
         let actionDone = SKAction.removeFromParent()
         let wait = SKAction.wait(forDuration: Double.random(in: 5.0...15.0))
         barrel.run(SKAction.sequence([wait, moveBarrel, actionDone]))
-        
         barrel.physicsBody = SKPhysicsBody(rectangleOf: barrel.size)
-        barrel.physicsBody?.isDynamic = true
+       
+        barrel.physicsBody?.affectedByGravity = false
+        
         barrel.physicsBody?.categoryBitMask = PhysicsCategory.barrel
         barrel.physicsBody?.contactTestBitMask = PhysicsCategory.missile
         barrel.physicsBody?.collisionBitMask = PhysicsCategory.none
@@ -219,11 +243,11 @@ class GameScene: SKScene {
         let actionDone = SKAction.removeFromParent()
         
         healthBonus.physicsBody = SKPhysicsBody(rectangleOf: healthBonus.size)
-        healthBonus.physicsBody?.isDynamic = true
+        healthBonus.physicsBody?.affectedByGravity = false
         healthBonus.physicsBody?.categoryBitMask = PhysicsCategory.health
         healthBonus.physicsBody?.contactTestBitMask = PhysicsCategory.submarine
         scoreBonus.physicsBody = SKPhysicsBody(rectangleOf: scoreBonus.size)
-        scoreBonus.physicsBody?.isDynamic = true
+        scoreBonus.physicsBody?.affectedByGravity = false
         scoreBonus.physicsBody?.categoryBitMask = PhysicsCategory.score
         scoreBonus.physicsBody?.contactTestBitMask = PhysicsCategory.submarine
         
@@ -257,7 +281,7 @@ class GameScene: SKScene {
       
       addChild(missile)
         
-      if offset.x < 0 || offset.x < size.width*0.1{
+      /*if offset.x < 0 || offset.x < size.width*0.1{
         let newPlayerPosition = touchLocation
         let speed: CGFloat = 500
         let distance = distanceBetweenPoints(a: submarine.position, b: touchLocation)
@@ -265,7 +289,9 @@ class GameScene: SKScene {
         submarine.run(playerMove)
         missile.removeFromParent()
       }
-      
+      */
+      submarine.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+      submarine.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 20))
       
       let direction = offset.normalized()
       let shootAmount = direction * 1000
@@ -275,7 +301,6 @@ class GameScene: SKScene {
       missile.run(SKAction.sequence([actionMove, actionMoveDone]))
       
       missile.physicsBody = SKPhysicsBody(circleOfRadius: missile.size.height/2)
-      missile.physicsBody?.isDynamic = true
       missile.physicsBody?.categoryBitMask = PhysicsCategory.missile
       missile.physicsBody?.contactTestBitMask = PhysicsCategory.shark
       missile.physicsBody?.collisionBitMask = PhysicsCategory.none
